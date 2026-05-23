@@ -24,12 +24,15 @@ client.on('connect', function (connack) {
         // 它在底层会直接报错或静默失败，导致订阅（.subscribe()）根本没有发送出去。
         console.log(args.qos)
         let param = parseInt(args.qos, 10);
-        console.log( param)
-        client.publish('/topic/qos', JSON.stringify(data), {qos: param}, function (err) {
-            if (err) {
-                console.log(err)
-            }
-        })
+        console.log(param)
+        setInterval(() => {
+            data.timestamp = Date.now()
+            client.publish('/topic/qos', JSON.stringify(data), {qos: param}, function (err) {
+                if (err) {
+                    console.log(err)
+                }
+            })
+        }, 5000)
     }else {
         console.log(`Connection failed: ${connack.returnCode}`)
     }
