@@ -1,11 +1,15 @@
 // 新版yargs: 推荐将初始化和读取写在一起
 let args = require('yargs/yargs')(process.argv.slice(2)).argv;
 let mqtt = require('mqtt')
-let client = mqtt.connect('mqtt://localhost',
-    {
-        clientId: "mqtt_sample_subscriber_id_2",
-        clean: false
-    })
+require('dotenv').config({path: `../../dev.env`});
+
+const mqtt_url = process.env.MQTT_ADDRESS;
+console.log(`Connecting to ${mqtt_url}`);
+
+var client = mqtt.connect(mqtt_url, {
+    clientId: "mqtt_sample_subscriber_id_2",
+    clean: false
+})
 
 client.on('connect', function (connack) {
     if (connack.returnCode === 0) {

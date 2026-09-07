@@ -1,37 +1,25 @@
 const mqtt = require('mqtt');
+require('dotenv').config({ path: `../../dev.env` });
 
-const client = mqtt.connect('mqtt://47.97.214.64:1893', {
-    clientId: 'publisher',
-    username: 'admin',
-    password: 'admin123',
+const mqtt_url = process.env.MQTT_ADDRESS;
+console.log(`Connecting to ${mqtt_url}`);
+
+var client = mqtt.connect(mqtt_url, {
+    clientId: 'guangyin2222',
+    username: process.env.MQTT_USERNAME,
+    password: process.env.MQTT_PASSWORD,
 });
 
 let message = {
-    "v1": 4441,
-    "v2": 4442,
-    "v3": 4443,
-    "v4": 4444,
-    "v5": 4445,
-    "v6": 4446,
-    "v7": 4447,
-    "V11": 3331,
-    "V12": 3332,
-    "V13": 3333,
-    "V14": 3334,
-    "V15": 3335,
-    "V16": 3336,
-    "V17": 3337,
-    "V18": 3338,
-    "V19": 3339,
-    "V20": 3340
+    "V20": 3991
 }
 
 client.on('connect', function (connack) {
     if (connack.returnCode === 0) {
 
-        setInterval(() => {
+        // setInterval(() => {
             client.publish(
-                '/guangyin/data',
+                '/guangyin2222/data',
                 JSON.stringify(message),
                 {qos: 1},
                 function (error) {
@@ -44,7 +32,7 @@ client.on('connect', function (connack) {
                         client.end();
                     }
                 })
-        }, 5000)
+        // }, 15000)
     } else {
         console.log(`Connection failed: ${connack.returnCode}`)
     }

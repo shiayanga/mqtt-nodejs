@@ -1,6 +1,10 @@
 const mqtt = require('mqtt');
+require('dotenv').config({ path: `../../dev.env` });
 
-const client = mqtt.connect('mqtt://39.101.69.217', {
+const mqtt_url = process.env.MQTT_ADDRESS;
+console.log(`Connecting to ${mqtt_url}`);
+
+var client = mqtt.connect(mqtt_url, {
     clientId: 'publisher'
 });
 

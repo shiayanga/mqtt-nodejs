@@ -1,6 +1,10 @@
 let mqtt = require('mqtt');
+require('dotenv').config({ path: `../../dev.env` });
 
-let client = mqtt.connect('mqtt://localhost', {
+const mqtt_url = process.env.MQTT_ADDRESS;
+console.log(`Connecting to ${mqtt_url}`);
+
+var client = mqtt.connect(mqtt_url, {
     clientId: 'subscriber'
 });
 
@@ -9,7 +13,7 @@ client.on('connect', function (connack) {
     if (connack.returnCode === 0) {
         if (connack.sessionPresent === false) {
             console.log('starting subscribe')
-            client.subscribe('/mqttjs_test_shiayanga/topic1',
+            client.subscribe('/retained/data',
                 {qos: 1},
                 function (err, granted) {
                     if (err !== null) {
@@ -26,7 +30,8 @@ client.on('connect', function (connack) {
     }
 })
 
-client.on('message',function (_,message,_) {
+client.on('message',function (_,message,packet) {
     let jsonPayload = JSON.parse(message);
-    console.log(`Received message:${jsonPayload.current}`)
+    console.log(`retained: ${packet.retain}`);
+    console.log(`Received message:` + JSON.stringify(jsonPayload));
 })

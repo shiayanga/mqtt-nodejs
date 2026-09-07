@@ -2,7 +2,12 @@
 let args = require('yargs/yargs')(process.argv.slice(2)).argv;
 let mqtt = require('mqtt');
 
-let client = mqtt.connect('mqtt://localhost',{
+require('dotenv').config({ path: `../../dev.env` });
+
+const mqtt_url = process.env.MQTT_ADDRESS;
+console.log(`Connecting to ${mqtt_url}`);
+
+var client = mqtt.connect(mqtt_url, {
     clientId: 'publisher'
 });
 
