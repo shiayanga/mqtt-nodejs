@@ -26,3 +26,4 @@ coverage
 *.log
 *.lock
 *.pem
+./dev.env
